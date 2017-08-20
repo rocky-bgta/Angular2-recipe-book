@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import {Recipe} from "./recipe";
+import {Ingredient} from "../shared/ingredient";
 
 @Injectable()
 export class RecipeService {
   private recipes: Recipe[] = [
-        new Recipe("Dummy", "Dummy","https://www.worldwidedisplays.co.uk/media/catalog/product/cache/1/small_image/295x295/9df78eab33525d08d6e5fb8d27136e95/6/k/6k2033_6k20722.jpg",[] ),
-        new Recipe("Dummy", "Dummy","https://www.worldwidedisplays.co.uk/media/catalog/product/cache/1/small_image/295x295/9df78eab33525d08d6e5fb8d27136e95/6/k/6k2033_6k20722.jpg",[] )
+        new Recipe("Salad_platter", "Very testy","https://upload.wikimedia.org/wikipedia/commons/9/94/Salad_platter.jpg",[
+            new Ingredient('French Fries',2),
+            new Ingredient('Cow Meet',1)
+        ] ),
+        new Recipe("waldorf-salad-horiz", "Low Price","http://assets.simplyrecipes.com/wp-content/uploads/2007/10/waldorf-salad-horiz-a-1500.jpg",[] )
     ];
 
   constructor() { }
