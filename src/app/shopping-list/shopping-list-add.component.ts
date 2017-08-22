@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShoppingListAddComponent implements OnInit {
 
+    isAdd:boolean = true;
   constructor() { }
 
   ngOnInit() {
