@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {RecipeService} from "../recipe.service";
 import {Subscription} from "rxjs";
 import {Recipe} from "../recipe";
-import {FormArray} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'rb-recipe-edit',
@@ -13,23 +13,24 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   private subsciption: Subscription;
   private recipeIndex: number;
   private recipe: Recipe;
-  private isName = true;
+  private isNew:boolean = true;
+  private recipeForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
-              private recipeService: RecipeService) { }
+              private recipeService: RecipeService,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit(){
-    let isNew = true;
     this.subsciption = this.route.params.subscribe(
       (params: any)=> {
 
         if(params.hasOwnProperty('id')){
-          isNew = false;
+          this.isNew = false;
           this.recipeIndex = +params['id'];
           this.recipe = this.recipeService.getRecipe(this.recipeIndex);
         }
         else{
-          isNew = true;
+            this.isNew = true;
           this.recipe = null;
         }
       }
@@ -47,6 +48,31 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     let recipeContent = '';
     let recipeIngredients: FormArray = new FormArray([]);
 
+    if(!this.isNew){
+        for(let i; i<this.recipe.ingredients.length; i++){
+            recipeIngredients.push(
+                new FormGroup({
+                    name: new FormControl(this.recipe.ingredients[i].name, Validators.required),
+                    amount: new FormControl(this.recipe.ingredients[i].amount, [
+                        Validators.required,
+                        Validators.pattern("\\d+")
+                    ])
+                })
+            );
+        }
+
+        recipeName = this.recipe.name;
+        recipeImageUrl = this.recipe.imagePath;
+        recipeContent = this.recipe.description;
+    }
+
+      this.recipeForm = this.formBuilder.group({
+              name: [recipeName, Validators.required],
+              imagePath: [recipeImageUrl, Validators.required],
+              description: [recipeContent, Validators.required],
+              ingredients: recipeIngredients
+          }
+      )
   }
 
 }
